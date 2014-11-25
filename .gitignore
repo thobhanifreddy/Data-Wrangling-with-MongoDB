@@ -37,3 +37,9 @@ nosetests.xml
 
 # OSX stuff
 .DS_Store
+
+Lesson_1_Data_Extraction_Fundamentals/11-Reading_Excel_Files/2013_ERCOT_Hourly_Load_Data.xls.zip
+
+Lesson_1_Data_Extraction_Fundamentals/11-Reading_Excel_Files/__MACOSX/._2013_ERCOT_Hourly_Load_Data.xls
+
+Lesson_1_Data_Extraction_Fundamentals/11-Reading_Excel_Files/2013_ERCOT_Hourly_Load_Data.xls
