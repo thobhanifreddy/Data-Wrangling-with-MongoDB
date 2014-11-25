@@ -46,14 +46,18 @@ def parse_file(datafile):
     # print "Convert time to a Python datetime tuple, from the Excel float:",
     # print xlrd.xldate_as_tuple(exceltime, 0)
     
+    coast_data = sheet.col_values(1, start_rowx=1, end_rowx=sheet.nrows + 1)
+    max_row = coast_data.index(max(coast_data)) + 1
+    min_row = coast_data.index(min(coast_data)) + 1
     
     data = {
-            'maxtime': (0, 0, 0, 0, 0, 0),
-            'maxvalue': 0,
-            'mintime': (0, 0, 0, 0, 0, 0),
-            'minvalue': 0,
-            'avgcoast': 0
+            'maxtime': xlrd.xldate_as_tuple(sheet.cell_value(max_row, 0), 0),
+            'maxvalue': sheet.cell_value(max_row, 1),
+            'mintime': xlrd.xldate_as_tuple(sheet.cell_value(min_row, 0), 0),
+            'minvalue': sheet.cell_value(min_row, 1),
+            'avgcoast': sum(coast_data)/len(coast_data)
     }
+    
     return data
 
 
