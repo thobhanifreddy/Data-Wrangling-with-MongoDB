@@ -38,23 +38,63 @@ def pretty_print(data, indent=4):
 
 
 def main():
+    # results = query_by_name(ARTIST_URL, query_type["simple"], "Nirvana")
+    # pretty_print(results)
+
+    # artist_id = results["artists"][1]["id"]
+    # print "\nARTIST:"
+    # pretty_print(results["artists"][1])
+
+    # artist_data = query_site(ARTIST_URL, query_type["releases"], artist_id)
+    # releases = artist_data["releases"]
+    # print "\nONE RELEASE:"
+    # pretty_print(releases[0], indent=2)
+    # release_titles = [r["title"] for r in releases]
+
+    # print "\nALL TITLES:"
+    # for t in release_titles:
+    #     print t
+
+    # Question 1: How many bands named "First Aid Kit"?
+    results = query_by_name(ARTIST_URL, query_type["simple"], "First Aid Kit")
+    # pretty_print(results)
+    count_FAK = 0
+
+    for artist in results["artists"]:
+        # pretty_print(artist)
+
+        if artist["name"] == "First Aid Kit":
+            count_FAK += 1
+
+    print "There are {0} bands named First Aid Kit".format(count_FAK)        
+
+    # Question 2: Begin_area name for Queen?
+    results = query_by_name(ARTIST_URL, query_type["simple"], "Queen")
+    # pretty_print(results)
+
+    Queen = results["artists"][0]
+
+    print "The begin-area name for Queen is " + Queen["begin-area"]["name"]
+
+    # Question 3: Spanish alias for The Beatles?
+    results = query_by_name(ARTIST_URL, query_type["simple"], "The Beatles")
+    # pretty_print(results)
+
+    for alias in results["artists"][0]["aliases"]:
+        if alias["locale"] == "es":
+            print "The Spanish alias for The Beatles is " + alias["name"]
+
+    # Question 4: Nirvana disambiguation?
     results = query_by_name(ARTIST_URL, query_type["simple"], "Nirvana")
-    pretty_print(results)
+    # pretty_print(results)
 
-    artist_id = results["artists"][1]["id"]
-    print "\nARTIST:"
-    pretty_print(results["artists"][1])
+    print "The disambiguation for Nirvana is " + results["artists"][0]["disambiguation"]
 
-    artist_data = query_site(ARTIST_URL, query_type["releases"], artist_id)
-    releases = artist_data["releases"]
-    print "\nONE RELEASE:"
-    pretty_print(releases[0], indent=2)
-    release_titles = [r["title"] for r in releases]
+    # Question 5: Where was One Direction formed?
+    results = query_by_name(ARTIST_URL, query_type["simple"], "One Direction")
+    # pretty_print(results)
 
-    print "\nALL TITLES:"
-    for t in release_titles:
-        print t
-
+    print "One Direction was formed in " + results["artists"][0]["life-span"]["begin"]
 
 if __name__ == '__main__':
     main()
