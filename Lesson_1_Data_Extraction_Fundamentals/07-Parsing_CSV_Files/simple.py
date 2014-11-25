@@ -16,8 +16,10 @@ DATAFILE = "beatles-diskography.csv"
 def parse_file(datafile):
     data = []
     with open(datafile, "rb") as f:
+        header = f.readline().strip().split(",")
+        
         for line in f:
-            print line
+            data.append(dict(zip(header, line.strip().split(","))))
 
     return data
 
