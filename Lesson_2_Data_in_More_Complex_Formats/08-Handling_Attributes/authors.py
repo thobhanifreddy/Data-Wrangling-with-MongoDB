@@ -25,7 +25,11 @@ def get_authors(root):
                 "insr": []
         }
 
-        # YOUR CODE HERE
+        for node in author:
+            if node.tag != "insr":
+                data[node.tag] = node.text
+            else:
+                data[node.tag].append(node.attrib["iid"])
 
         authors.append(data)
 
