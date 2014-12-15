@@ -47,6 +47,17 @@ def process_file(f):
 
         soup = BeautifulSoup(html)
 
+        for row in soup.find('table', class_='dataTDRight').find_all('tr', class_='dataTDRight'):
+            cols = row.find_all('td')
+
+            if cols[1].text.lower().find('total') == -1:
+                info["year"] = int(cols[0].text)
+                info["month"] = int(cols[1].text)
+                info["flights"] = {"domestic" : int(cols[2].text.replace(',', '')), 
+                                   "international" : int(cols[3].text.replace(',', ''))}
+
+                data.append(info)                   
+
     return data
 
 
