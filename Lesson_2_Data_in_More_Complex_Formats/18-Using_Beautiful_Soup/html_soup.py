@@ -15,8 +15,10 @@ def extract_data(page):
     data = {"eventvalidation": "",
             "viewstate": ""}
     with open(page, "r") as html:
-        # do something here to find the necessary values
-        pass
+      soup = BeautifulSoup(html)
+
+      data["viewstate"] = soup.find(id="__VIEWSTATE")["value"]
+      data["eventvalidation"] = soup.find(id="__EVENTVALIDATION")["value"]
 
     return data
 
