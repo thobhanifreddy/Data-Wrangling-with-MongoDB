@@ -10,24 +10,38 @@ from zipfile import ZipFile
 datafile = "2013_ERCOT_Hourly_Load_Data.xls"
 outfile = "2013_Max_Loads.csv"
 
-
 def open_zip(datafile):
     with ZipFile('{0}.zip'.format(datafile), 'r') as myzip:
         myzip.extractall()
 
-
 def parse_file(datafile):
     workbook = xlrd.open_workbook(datafile)
     sheet = workbook.sheet_by_index(0)
-    data = None
+    data = []
     # YOUR CODE HERE
     # Remember that you can use xlrd.xldate_as_tuple(sometime, 0) to convert
     # Excel date to Python tuple of (year, month, day, hour, minute, second)
+    data.append(['Station', 'Year', 'Month', 'Day', 'Hour', 'Max Load'])
+
+    stations = sheet.row_values(0, start_colx=1, end_colx=9)
+
+    max_load = 0
+
+    for i in range(len(stations)):
+        station_values = sheet.col_values(i + 1, start_rowx=1)
+
+        max_row = station_values.index(max(station_values)) + 1
+        Year, Month, Day, Hour, Minute, Second = xlrd.xldate_as_tuple(sheet.cell_value(max_row,0), 0)
+        data.append([stations[i], Year, Month, Day, Hour, max(station_values)])
+
     return data
 
 def save_file(data, filename):
-    # YOUR CODE HERE
+    with open(filename, 'wb') as of:
+        writer = csv.writer(of, delimiter='|')
 
+        for row in data:
+            writer.writerow(row)
     
 def test():
     open_zip(datafile)
@@ -45,5 +59,5 @@ def test():
                 for field in fields:
                     assert ans[s][field] == line[field]
 
-        
-test()
+if __name__ == '__main__':
+    test()
