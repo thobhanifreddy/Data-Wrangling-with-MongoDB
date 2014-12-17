@@ -25,22 +25,26 @@ OUTPUT_BAD = 'FIXME-autos.csv'
 
 def process_file(input_file, output_good, output_bad):
 
-    with open(input_file, "r") as f:
+    with open(input_file, "r") as f, open(output_good, "w") as og, open(output_bad, "w") as ob:
         reader = csv.DictReader(f)
         header = reader.fieldnames
 
-        #COMPLETE THIS FUNCTION
+        goodWriter = csv.DictWriter(og, delimiter=",", fieldnames = header)
+        goodWriter.writeheader()
 
+        badWriter = csv.DictWriter(ob, delimiter=",", fieldnames = header)
+        badWriter.writeheader()
 
-
-    # This is just an example on how you can use csv.DictWriter
-    # Remember that you have to output 2 files
-    with open(output_good, "w") as g:
-        writer = csv.DictWriter(g, delimiter=",", fieldnames= header)
-        writer.writeheader()
-        for row in YOURDATA:
-            writer.writerow(row)
-
+        for row in reader:
+            if row['URI'].find('dbpedia.org') > -1:
+                try:
+                    row['productionStartYear'] = int(row['productionStartYear'][:4])
+                    if row['productionStartYear'] in range(1886, 2015):
+                        goodWriter.writerow(row)
+                    else:
+                        badWriter.writerow(row)
+                except ValueError: 
+                    badWriter.writerow(row)
 
 def test():
 
