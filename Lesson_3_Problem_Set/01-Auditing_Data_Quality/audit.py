@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+1#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 In this problem set you work with cities infobox data, audit it, come up with a cleaning idea and then clean it up.
@@ -25,11 +25,44 @@ FIELDS = ["name", "timeZone_label", "utcOffset", "homepage", "governmentType_lab
           "elevation", "maximumElevation", "minimumElevation", "populationDensity", "wgs84_pos#lat", "wgs84_pos#long", 
           "areaLand", "areaMetro", "areaUrban"]
 
+def is_int(value):
+    try:
+        int(value)
+        return True
+    except:
+        return False
+
+def is_float(value):
+    try:
+        float(value)
+        return True
+    except:
+        return False
+
 def audit_file(filename, fields):
     fieldtypes = {}
 
-    # YOUR CODE HERE
+    for field in fields:
+        fieldtypes[field] = set()
 
+    with open(filename, 'r') as input:
+        reader = csv.DictReader(input)
+
+        for row in reader:
+            if row['URI'].find('dbpedia') > -1:
+                
+                for field in fields:
+
+                    if row[field] == "NULL" or row[field] == "":
+                        fieldtypes[field].add(type(None))
+                    elif row[field][0] == "{":
+                        fieldtypes[field].add(type([]))
+                    elif is_int(row[field]):
+                        fieldtypes[field].add(type(1))    
+                    elif is_float(row[field]):
+                        fieldtypes[field].add(type(1.1))
+                    else:
+                        fieldtypes[field].add(type(''))  
 
     return fieldtypes
 
@@ -38,7 +71,7 @@ def test():
     fieldtypes = audit_file(CITIES, FIELDS)
 
     pprint.pprint(fieldtypes)
-
+    
     assert fieldtypes["areaLand"] == set([type(1.1), type([]), type(None)])
     assert fieldtypes['areaMetro'] == set([type(1.1), type(None)])
     
