@@ -11,7 +11,7 @@ For instructions related to MongoDB setup and datasets please see Course Materia
 the following link:
 https://www.udacity.com/wiki/ud032
 """
-
+import pprint
 
 def get_db(db_name):
     from pymongo import MongoClient
@@ -22,7 +22,7 @@ def get_db(db_name):
 
 def porsche_query():
     # Please fill in the query to find all autos manuafactured by Porsche
-    query = {}
+    query = {"manufacturer" : "Porsche"}
     return query
 
 
@@ -35,4 +35,5 @@ if __name__ == "__main__":
     db = get_db('examples')
     query = porsche_query()
     p = find_porsche(db, query)
-    import pprint
+    for a in p:
+        pprint.pprint(a)
