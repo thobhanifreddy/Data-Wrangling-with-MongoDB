@@ -21,7 +21,10 @@ CITIES = 'cities.csv'
 
 def fix_name(name):
 
-    # YOUR CODE HERE
+    if name == "NULL" or name == "":
+        return []
+    else:
+        return name.replace('{', '').replace('}','').split('|')
 
     return name
 
