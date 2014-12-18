@@ -19,10 +19,22 @@ import pprint
 
 CITIES = 'cities.csv'
 
+def is_float(value):
+    try:
+        float(value)
+        return True
+    except:
+        return False
 
 def fix_area(area):
 
-    # YOUR CODE HERE
+    if is_float(area):
+        return area
+    elif area[0] == "{":
+        areas = area.replace('{','').replace('}','').split('|')
+        return float(max(areas, key = lambda x: len(x.split('e')[0])))
+    else:
+        return None        
 
     return area
 
