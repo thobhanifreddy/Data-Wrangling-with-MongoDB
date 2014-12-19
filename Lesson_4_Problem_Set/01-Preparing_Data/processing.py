@@ -62,8 +62,36 @@ def process_file(filename, fields):
             l = reader.next()
 
         for line in reader:
-            # YOUR CODE HERE
-            pass
+
+          line['rdf-schema#label'] = re.sub('\(.+\)', '', line['rdf-schema#label']).strip()
+          if line['rdf-schema#label'] == 'NULL':
+            line['rdf-schema#label'] = None
+
+          if line['name'] == 'NULL' or re.search(r'\W', line['name']):
+            line['name'] = line['rdf-schema#label']
+
+          if line['synonym'] == 'NULL':
+            line['synonym'] = None
+          else:
+            line['synonym'] = parse_array(line['synonym'])
+            for syn in line['synonym']:
+              syn.replace('*', "")
+
+          item = {}
+          item['classification'] = {}
+
+          for key in fields:
+            
+            if line[key] == 'NULL':
+              line[key] = None
+
+            if re.search(r'_label', key):
+              item['classification'][fields[key]] = line[key]
+            else:
+              item[fields[key]] = line[key] 
+
+          data.append(item)          
+
     return data
 
 
