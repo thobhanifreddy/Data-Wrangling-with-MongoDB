@@ -30,6 +30,8 @@ in examples in this lesson. If you attempt some of the same queries that we look
 examples, your results will be different.
 """
 
+import pprint
+
 def get_db(db_name):
     from pymongo import MongoClient
     client = MongoClient('localhost:27017')
@@ -39,6 +41,27 @@ def get_db(db_name):
 def make_pipeline():
     # complete the aggregation pipeline
     pipeline = [ ]
+    dict = {
+            "$match" :  {
+                            "user.time_zone" : "Brasilia",
+                            "user.statuses_count" : {"$gte" : 100}
+                        }   
+        }
+    pipeline.append(dict)
+    dict = {
+            "$project" :    {
+                                "followers" : "$user.followers_count",
+                                "screen_name" : "$user.screen_name",
+                                "tweets" : "$user.statuses_count"
+                            }
+        }
+    pipeline.append(dict)
+    dict = {
+            "$sort" : { "followers" : -1}
+        }
+    pipeline.append(dict)
+    dict = { "$limit" : 1}    
+    pipeline.append(dict)    
     return pipeline
 
 def aggregate(db, pipeline):
@@ -49,6 +72,7 @@ if __name__ == '__main__':
     db = get_db('twitter')
     pipeline = make_pipeline()
     result = aggregate(db, pipeline)
+    pprint.pprint(result)
     assert len(result["result"]) == 1
     assert result["result"][0]["followers"] == 17209
     import pprint
