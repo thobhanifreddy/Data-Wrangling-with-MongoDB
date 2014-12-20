@@ -34,6 +34,18 @@ def get_db(db_name):
 def make_pipeline():
     # complete the aggregation pipeline
     pipeline = [ ]
+    group = {
+                "$group" :  {
+                                "_id" : "$user.screen_name",
+                                "count" : { "$sum" : 1 },
+                                "tweet_texts" : { "$push" : "$text"}
+                            }
+            }
+    pipeline.append(group)
+    sort = { "$sort" : { "count" : -1 } } 
+    pipeline.append(sort)
+    limit = { "$limit" : 5 }
+    pipeline.append(limit)
     return pipeline
 
 def aggregate(db, pipeline):
