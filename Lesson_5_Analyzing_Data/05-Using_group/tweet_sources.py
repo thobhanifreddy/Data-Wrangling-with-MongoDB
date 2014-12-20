@@ -32,6 +32,10 @@ def get_db(db_name):
 def make_pipeline():
     # complete the aggregation pipeline
     pipeline = []
+    pipeline.append(
+        { "$group" : { "_id" : "$source",
+                       "count" : { "$sum" : 1} } })
+    pipeline.append({ "$sort" : { "count" : -1 } })
     return pipeline
 
 def tweet_sources(db, pipeline):
@@ -39,7 +43,7 @@ def tweet_sources(db, pipeline):
     return result
 
 if __name__ == '__main__':
-    db = get_db('twitter')
+    db = get_db('examples')
     pipeline = make_pipeline()
     result = tweet_sources(db, pipeline)
     import pprint
