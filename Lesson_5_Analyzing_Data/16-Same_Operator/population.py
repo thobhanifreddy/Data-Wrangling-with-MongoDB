@@ -34,6 +34,20 @@ def get_db(db_name):
 def make_pipeline():
     # complete the aggregation pipeline
     pipeline = [ ]
+    pipeline.append({ "$match" : { "country" : "India" } })
+    pipeline.append({ "$unwind" : "$isPartOf"})
+    group = { "$group" :    {
+                                "_id" : "$isPartOf",
+                                "avg" : { "$avg" : "$population" }
+                            }
+            }
+    pipeline.append(group)
+    group = { "$group" :    {
+                                "_id" : "India Regional City Population Average",
+                                "avg" : { "$avg" : "$avg" }
+                            }
+            }
+    pipeline.append(group)
     return pipeline
 
 def aggregate(db, pipeline):
