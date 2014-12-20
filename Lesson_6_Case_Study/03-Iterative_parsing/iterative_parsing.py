@@ -13,8 +13,15 @@ import xml.etree.ElementTree as ET
 import pprint
 
 def count_tags(filename):
-        # YOUR CODE HERE
+    tags = {}
 
+    for event, elem in ET.iterparse(filename):
+        if elem.tag in tags:
+            tags[elem.tag] += 1
+        else:
+            tags[elem.tag] = 1
+
+    return tags
 
 def test():
 
