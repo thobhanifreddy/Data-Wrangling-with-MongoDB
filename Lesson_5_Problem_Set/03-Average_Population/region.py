@@ -43,7 +43,7 @@ def make_pipeline():
     pipeline.append(group)
     group = { "$group" :    {
                                 "_id" : "$_id.country",
-                                "avg" : { "$avg" : "$avg" }
+                                "avgRegionalPopulation" : { "$avg" : "$avg" }
                             }
             }
     pipeline.append(group)
