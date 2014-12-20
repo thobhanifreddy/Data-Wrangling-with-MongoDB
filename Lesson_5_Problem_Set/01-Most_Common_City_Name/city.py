@@ -37,6 +37,11 @@ def get_db(db_name):
 def make_pipeline():
     # complete the aggregation pipeline
     pipeline = [ ]
+    pipeline.append( { "$match" : { "name" : { "$exists" : 1 } } } ) 
+    pipeline.append( { "$group" : { "_id" : "$name",
+                                    "count" : { "$sum" : 1 } } } )
+    pipeline.append( { "$sort" : { "count" : -1 } } )
+    pipeline.append( { "$limit" : 1 } )
     return pipeline
 
 def aggregate(db, pipeline):
