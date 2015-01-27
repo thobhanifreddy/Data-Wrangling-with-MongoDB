@@ -95,17 +95,13 @@ def shape_element(element):
 
     if element.tag == "node" or element.tag == "way" :
 
-      if element.tag == "node":
-        node['type'] = "node"
-      elif element.tag == "way":
-        node['type'] = "way"
+      node['type'] = element.tag
 
       # Parse attributes
       for a in element.attrib:
         if a in CREATED:
           if 'created' not in node:
             node['created'] = {}
-
           node['created'][a] = element.attrib[a]
 
         elif a in ['lat', 'lon']:
@@ -131,7 +127,7 @@ def shape_element(element):
               if 'address' not in node:
                 node['address'] = {}
 
-              sub_attr = tag.attrib['k'].split(':')
+              sub_attr = tag.attrib['k'].split(':', 1)
               node['address'][sub_attr[1]] = tag.attrib['v']
 
             # All other single colons processed normally
@@ -173,7 +169,7 @@ def test():
     # call the process_map procedure with pretty=False. The pretty=True option adds 
     # additional spaces to the output, making it significantly larger.
     data = process_map('example.osm', True)
-    pprint.pprint(data[0])
+    pprint.pprint(data)
     
     assert data[0] == {
                         "id": "261114295", 
